@@ -1,0 +1,41 @@
+<div class="form-container">
+  <h2>Cadastro de Usuário</h2>
+
+  @if (mensagemSucesso) {
+    <div class="alert success">{{ mensagemSucesso }}</div>
+  }
+
+  @if (mensagemErro) {
+    <div class="alert error">{{ mensagemErro }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input id="nome" type="text" formControlName="nome" placeholder="Ex: João Silva" />
+      @if (form.get('nome')?.touched && form.get('nome')?.invalid) {
+        <small class="error-text">Nome é obrigatório (mínimo 3 caracteres).</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="Ex: joao&#64;example.com" />
+      @if (form.get('email')?.touched && form.get('email')?.invalid) {
+        <small class="error-text">Informe um email válido.</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="cep">CEP</label>
+      <input id="cep" type="text" formControlName="cep" placeholder="Ex: 55606195" maxlength="8" />
+      @if (form.get('cep')?.touched && form.get('cep')?.invalid) {
+        <small class="error-text">CEP deve conter exatamente 8 dígitos.</small>
+      }
+    </div>
+
+    <button type="submit" [disabled]="carregando">
+      {{ carregando ? 'Cadastrando...' : 'Cadastrar' }}
+    </button>
+  </form>
+</div>
