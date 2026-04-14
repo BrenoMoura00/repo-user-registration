@@ -15,6 +15,7 @@ public class Endereco {
     private String estado;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "id",name = "user_id")
     private Usuario usuario;
 
     public Endereco() {}
