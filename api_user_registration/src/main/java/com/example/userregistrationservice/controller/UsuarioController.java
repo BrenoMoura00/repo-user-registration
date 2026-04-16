@@ -47,4 +47,28 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioResponse>> listarUsuarios() {
         return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Remover usuário", description = "Remove um usuário e todos os seus endereços associados (com cascade)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    public ResponseEntity<?> removerUsuario(@PathVariable Long id) {
+        try {
+            logger.info("Removendo usuário com ID: " + id);
+            usuarioService.removerUsuario(id);
+            return ResponseEntity.ok(new java.util.HashMap<String, String>() {{
+                put("mensagem", "Usuário removido com sucesso");
+            }});
+        } catch (IllegalArgumentException e) {
+            logger.error("Usuário não encontrado: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new java.util.HashMap<String, String>() {{
+                        put("erro", "Usuário não encontrado");
+                    }});
+        }
+    }
 }
