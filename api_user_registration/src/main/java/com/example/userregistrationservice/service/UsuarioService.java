@@ -9,4 +9,6 @@ public interface UsuarioService {
     void salvarUsuario(UsuarioRequest usuarioRequest);
 
     List<UsuarioResponse> listarUsuarios();
+
+    void removerUsuario(Long id);
 }

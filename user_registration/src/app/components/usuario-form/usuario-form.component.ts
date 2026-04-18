@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { catchError, EMPTY, timeout } from 'rxjs';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario.model';
 
@@ -17,6 +18,7 @@ export class UsuarioFormComponent implements OnInit {
   mensagemErro = '';
   carregando = false;
   usuarios: Usuario[] = [];
+  usuarioParaExcluir: Usuario | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -68,5 +70,48 @@ export class UsuarioFormComponent implements OnInit {
         this.carregando = false;
       },
     });
+  }
+
+  abrirConfirmacaoExclusao(usuario: Usuario): void {
+    if (usuario.id == null) {
+      return;
+    }
+    this.mensagemSucesso = '';
+    this.mensagemErro = '';
+    this.usuarioParaExcluir = usuario;
+  }
+
+  fecharConfirmacaoExclusao(): void {
+    this.usuarioParaExcluir = null;
+  }
+
+  confirmarExclusao(): void {
+    const id = this.usuarioParaExcluir?.id;
+    if (id == null) {
+      return;
+    }
+
+    this.usuarioParaExcluir = null;
+    this.mensagemErro = '';
+    this.usuarios = this.usuarios.filter((u) => u.id !== id);
+    this.mensagemSucesso = 'Usuário excluído com sucesso.';
+
+    this.usuarioService
+      .excluir(id)
+      .pipe(
+        timeout(20000),
+        catchError(() => {
+          this.mensagemSucesso = '';
+          this.mensagemErro =
+            'Não foi possível concluir a exclusão no servidor. Recarregamos a lista.';
+          this.carregarUsuarios();
+          return EMPTY;
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.carregarUsuarios();
+        },
+      });
   }
 }
