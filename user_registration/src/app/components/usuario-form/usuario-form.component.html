@@ -1,23 +1,3 @@
-<div
-  class="modal-root"
-  *ngIf="usuarioParaExcluir"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="confirmar-exclusao-titulo"
->
-  <div class="modal-backdrop" (click)="fecharConfirmacaoExclusao()"></div>
-  <div class="modal-dialog" (click)="$event.stopPropagation()">
-    <h3 id="confirmar-exclusao-titulo">Excluir usuário?</h3>
-    <p>
-      <strong>{{ usuarioParaExcluir.nome }}</strong> será removido junto com os endereços. Não dá para desfazer.
-    </p>
-    <div class="modal-actions">
-      <button type="button" class="btn-secondary" (click)="fecharConfirmacaoExclusao()">Cancelar</button>
-      <button type="button" class="btn-danger" (click)="confirmarExclusao()">Excluir</button>
-    </div>
-  </div>
-</div>
-
 <div class="form-container">
   <h2>Cadastro de Usuário</h2>
 
@@ -55,10 +35,10 @@
   </form>
 </div>
 
-<div class="table-container" *ngIf="usuarios.length > 0">
+<div class="table-container">
   <h2>Usuários cadastrados</h2>
 
-  <table id="dataTable">
+  <table *ngIf="usuarios.length > 0" id="dataTable">
     <thead>
       <tr>
         <th>Nome</th>
@@ -83,17 +63,10 @@
             <span>Nenhum endereço</span>
           </ng-template>
         </td>
-        <td class="acoes">
-          <button
-            type="button"
-            class="btn-excluir"
-            *ngIf="usuario.id != null"
-            (click)="abrirConfirmacaoExclusao(usuario)"
-          >
-            Excluir
-          </button>
-        </td>
+        <td></td>
       </tr>
     </tbody>
   </table>
+
+  <p *ngIf="usuarios.length === 0" class="empty-message">Nenhum usuário cadastrado ainda.</p>
 </div>

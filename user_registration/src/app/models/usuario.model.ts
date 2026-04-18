@@ -7,7 +7,6 @@ export interface Endereco {
 }
 
 export interface Usuario {
-  id?: number;
   nome: string;
   email: string;
   cep?: string;

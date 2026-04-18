@@ -1,8 +1,6 @@
 package com.example.userregistrationservice.model;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Usuario {
@@ -13,9 +11,6 @@ public class Usuario {
     private String nome;
     private String email;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Endereco> enderecos = new ArrayList<>();
-    
     public Usuario() {
     }
 
